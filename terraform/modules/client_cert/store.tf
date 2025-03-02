@@ -3,9 +3,10 @@ resource "aws_s3_bucket" "store" {
 }
 
 resource "aws_s3_object" "root_ca_cert" {
-  bucket  = aws_s3_bucket.store.bucket
-  key     = "root_ca.cert"
-  content = tls_self_signed_cert.root.cert_pem
+  bucket       = aws_s3_bucket.store.bucket
+  key          = "root_ca.crt"
+  content      = tls_self_signed_cert.root.cert_pem
+  content_type = "text/plain"
 }
 
 resource "aws_lb_trust_store" "store" {

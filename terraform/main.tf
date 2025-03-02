@@ -113,6 +113,6 @@ resource "local_sensitive_file" "key" {
   content  = module.client_cert.client_key
 }
 resource "local_sensitive_file" "cert" {
-  filename = "client_cert.cert"
+  filename = "client_cert.crt"
   content  = module.client_cert.client_cert
 }
