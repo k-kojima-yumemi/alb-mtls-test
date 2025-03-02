@@ -10,6 +10,10 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 
   backend "s3" {
@@ -28,10 +32,12 @@ provider "aws" {
 }
 
 locals {
-  base_name     = var.base_name
-  function_name = "${local.base_name}-function"
-  alb_name      = "${local.base_name}-alb"
-  domain        = "${local.base_name}.${var.host_zone_name}"
+  base_name              = var.base_name
+  function_name          = "${local.base_name}-function"
+  alb_name               = "${local.base_name}-alb"
+  domain                 = "${local.base_name}.${var.host_zone_name}"
+  trust_store_name       = "${local.base_name}-mtls"
+  trust_store_buket_name = "${local.trust_store_name}-bucket"
 }
 
 # Lambda Module
@@ -45,6 +51,12 @@ module "cert" {
   source    = "./modules/cert"
   zone_name = var.host_zone_name
   domain    = local.domain
+}
+
+module "client_cert" {
+  source              = "./modules/client_cert"
+  trust_store_name    = local.trust_store_name
+  trust_store_s3_name = local.trust_store_buket_name
 }
 
 module "alb" {
