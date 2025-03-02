@@ -74,6 +74,16 @@ module "alb" {
   domain          = local.domain
 }
 
+module "alb_target" {
+  source = "./modules/alb_target"
+
+  function_name = module.lambda.function_name
+  function_arn  = module.lambda.function_arn
+  listener_arn  = module.alb.https_listener_arn
+  path_pattern  = "/*"
+  priority      = 100
+}
+
 # Just for local testing
 resource "local_sensitive_file" "key" {
   filename = "client_cert.key"
