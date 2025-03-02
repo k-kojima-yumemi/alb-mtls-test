@@ -28,7 +28,10 @@ provider "aws" {
 }
 
 locals {
-  function_name = "kkojima-alb-mtls-test-function"
+  base_name     = var.base_name
+  function_name = "${local.base_name}-function"
+  alb_name      = "${local.base_name}-alb"
+  domain        = "${local.base_name}.${var.host_zone_name}"
 }
 
 # Lambda Module
@@ -36,4 +39,18 @@ module "lambda" {
   source = "./modules/lambda"
 
   function_name = local.function_name
+}
+
+module "cert" {
+  source    = "./modules/cert"
+  zone_name = var.host_zone_name
+  domain    = local.domain
+}
+
+module "alb" {
+  source = "./modules/alb"
+
+  certificate_arn = module.cert.certification_arn
+  name            = local.alb_name
+  subnet_names    = var.subnets
 }
