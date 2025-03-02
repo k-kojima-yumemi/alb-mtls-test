@@ -74,6 +74,14 @@ module "cloudflare_zone" {
   cloudflare_domain     = local.cloudflare_domain
 }
 
+module "cloudflare_access" {
+  source             = "./modules/cloudflare_access"
+  cloudflare_zone_id = module.cloudflare_zone.cloudflare_zone_id
+  cloudflare_domain  = local.cloudflare_domain
+  application_name   = "alb-mtls-test"
+  email_list         = var.access_allowed_email
+}
+
 module "cert" {
   source    = "./modules/cert"
   zone_name = var.host_zone_name
