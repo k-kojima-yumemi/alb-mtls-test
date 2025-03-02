@@ -61,4 +61,8 @@ resource "aws_lb_listener" "https" {
       status_code  = "404"
     }
   }
+  mutual_authentication {
+    mode            = "verify"
+    trust_store_arn = var.trust_store_arn
+  }
 }

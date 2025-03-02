@@ -14,6 +14,10 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
   }
 
   backend "s3" {
@@ -65,4 +69,15 @@ module "alb" {
   certificate_arn = module.cert.certification_arn
   name            = local.alb_name
   subnet_names    = var.subnets
+  trust_store_arn = module.client_cert.trust_store_arn
+}
+
+# Just for local testing
+resource "local_sensitive_file" "key" {
+  filename = "client_cert.key"
+  content  = module.client_cert.client_key
+}
+resource "local_sensitive_file" "cert" {
+  filename = "client_cert.cert"
+  content  = module.client_cert.client_cert
 }

@@ -12,3 +12,8 @@ variable "certificate_arn" {
   description = "ARN of the SSL certificate for HTTPS listener"
   type        = string
 }
+
+variable "trust_store_arn" {
+  description = "ARN of the trust store"
+  type        = string
+}

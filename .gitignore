@@ -3,6 +3,7 @@
 lambda_handler.zip
 *.key
 *.crt
+*.cert
 *.pem
 
 # Local .terraform directories

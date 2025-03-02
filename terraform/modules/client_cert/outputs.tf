@@ -18,6 +18,10 @@ output "client_cert" {
 
 output "client_key" {
   description = "The client private key in PEM format"
-  value       = tls_locally_signed_cert.client.ca_private_key_pem
+  value       = tls_private_key.client.private_key_pem
   sensitive   = true
+}
+
+output "trust_store_arn" {
+  value = aws_lb_trust_store.store.arn
 }
