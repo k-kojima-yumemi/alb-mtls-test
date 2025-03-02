@@ -66,3 +66,14 @@ resource "aws_lb_listener" "https" {
     trust_store_arn = var.trust_store_arn
   }
 }
+
+resource "aws_route53_record" "main" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = var.domain
+  type    = "A"
+  alias {
+    evaluate_target_health = false
+    name                   = aws_lb.this.dns_name
+    zone_id                = aws_lb.this.zone_id
+  }
+}

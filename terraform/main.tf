@@ -70,6 +70,8 @@ module "alb" {
   name            = local.alb_name
   subnet_names    = var.subnets
   trust_store_arn = module.client_cert.trust_store_arn
+  zone_name       = var.host_zone_name
+  domain          = local.domain
 }
 
 # Just for local testing
