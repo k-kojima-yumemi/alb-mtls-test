@@ -1,7 +1,7 @@
 variable "organization" {
   description = "Organization name for the certificates"
   type        = string
-  default     = "YUMEMI"
+  default     = "My Organization"
 }
 
 variable "root_common_name" {

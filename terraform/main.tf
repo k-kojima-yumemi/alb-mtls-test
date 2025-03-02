@@ -18,6 +18,11 @@ terraform {
       source  = "hashicorp/local"
       version = "~> 2.5"
     }
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      # Use the last version of v4 as v5 is too unstable
+      version = "4.52.0"
+    }
   }
 
   backend "s3" {
@@ -35,6 +40,10 @@ provider "aws" {
   }
 }
 
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
+
 locals {
   base_name              = var.base_name
   function_name          = "${local.base_name}-function"
@@ -42,6 +51,7 @@ locals {
   domain                 = "${local.base_name}.${var.host_zone_name}"
   trust_store_name       = "${local.base_name}-mtls"
   trust_store_buket_name = "${local.trust_store_name}-bucket"
+  cloudflare_domain      = "alb-mtls-test.${var.cloudflare_zone_name}"
 }
 
 # Lambda Module
@@ -49,6 +59,19 @@ module "lambda" {
   source = "./modules/lambda"
 
   function_name = local.function_name
+}
+
+# Cloudflare Zone Module
+module "cloudflare_zone" {
+  source = "./modules/cloudflare_zone"
+
+  cloudflare_zone_name  = var.cloudflare_zone_name
+  host_zone_name        = var.host_zone_name
+  cloudflare_account_id = var.cloudflare_account_id
+  client_cert           = module.client_cert.client_cert
+  client_key            = module.client_cert.client_key
+  domain                = local.domain
+  cloudflare_domain     = local.cloudflare_domain
 }
 
 module "cert" {
