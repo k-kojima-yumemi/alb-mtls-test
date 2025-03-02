@@ -1,9 +1,13 @@
+.idea
+*plan.txt
+
 # Local .terraform directories
 **/.terraform/*
 
 # .tfstate files
 *.tfstate
 *.tfstate.*
+*.tfbackend
 
 # Crash log files
 crash.log
