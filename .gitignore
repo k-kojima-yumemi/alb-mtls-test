@@ -1,5 +1,6 @@
 .idea
 *plan.txt
+lambda_handler.zip
 
 # Local .terraform directories
 **/.terraform/*
