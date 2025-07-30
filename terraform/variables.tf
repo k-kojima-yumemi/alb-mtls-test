@@ -35,8 +35,3 @@ variable "access_allowed_email" {
   type        = list(string)
   sensitive   = true
 }
-
-variable "access_allowed_email" {
-  description = "Allowed email addresses"
-  type        = list(string)
-}
